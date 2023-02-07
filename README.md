@@ -30,12 +30,22 @@ Some picture have a .json file with a shorter filename than their associated pic
 
 I used a library called `rename` that you can install through `brew` if you're on macOS: `brew install rename`. For Linux users, this command should be already available.
 
-Navigate to the folder of your choice and run this command:
+Navigate to the root of your takeout photos and run this command:
 ```
-rename 's/^(.{46}).*(\..*)$/$1$2/' * -n
+rename 's/^(.{46}).*(\..*)$/$1$2/' -g '**/*' -n
 ```
-Add `-n` to the command in a folder to see if any file is gonna be shortened and how.  
+Add `-n` to the command in a folder to perform a 'dry run', to see what changes would be made. Once ready, re-run without `-n`.
 WARNING: if your file is a .jpg.json, it's gonna cut into the jpg extension as it won't recognize the double extension. Fix these ones manually before.
+
+## Fix JSON filenames
+
+Sometimes the JSON filename is in a different order to the photo itself. For example `IMG_12345.heic(1).json` for a photo file named `IMG_12345(1).heic`. We can again fix that by using `rename`:
+
+```
+rename 's/^(.*)\.([a-zA-Z]+)\(([0-9]+)\)\.json/$1($3).$2.json/' -g '**/*' -n
+```
+
+Again, using `-n` to verify the changes first.
 
 ## Adjust dates of all files
 You will need to install `exiftool`.  
